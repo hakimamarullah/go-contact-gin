@@ -26,11 +26,13 @@ func GetPostgreConnection() contract.Dbs {
 }
 
 func (d *PostgreDB) OpenConnection() {
-	username := config.MysqlDB_USER
-	password := config.MysqlDB_PASS
-	host := config.MysqlDB_HOST
-	port := config.MysqlDB_PORT
-	db := config.MysqlDB_DB
+	appConfig := config.AppGetConfig()
+
+	username := appConfig.MysqlDB_USER
+	password := appConfig.MysqlDB_PASS
+	host := appConfig.MysqlDB_HOST
+	port := appConfig.MysqlDB_PORT
+	db := appConfig.MysqlDB_DB
 
 	connetionstring := "%s:%s@tcp(%s:%s)/%s?parseTime=true"
 	db_, err := sql.Open("mysql", fmt.Sprintf(connetionstring, username, password, host, port, db))

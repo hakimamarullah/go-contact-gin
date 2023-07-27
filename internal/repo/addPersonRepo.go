@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 	"database/sql"
-	"time"
 
+	"contact_chiv2/config"
 	"contact_chiv2/domain/contract"
 	"contact_chiv2/domain/model"
 )
@@ -22,7 +22,7 @@ func NewAddPersonRepo(db *sql.DB) contract.AddPersonRepoInterface {
 }
 
 func (repo *AddPersonRepo) AddPerson(data model.Person) (lastinserted int64, err error) {
-	timeoutctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	timeoutctx, cancel := context.WithTimeout(context.Background(), config.AppGetConfig().MysqlDB_TimeoutQuick)
 	defer cancel()
 
 	res, err := trx.ExecContext(timeoutctx, repo.query, data.FirstName, data.LastName, data.Age, data.AddressId)
