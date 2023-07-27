@@ -21,16 +21,11 @@ func NewAddCountryRepo(db *sql.DB) contract.AddCountryRepoInterface {
 	}
 }
 
-func (repo *AddCountryRepo) AddCountry(data model.Country) (lastinserted int64, tx *sql.Tx, err error) {
-	timeoutctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+func (repo *AddCountryRepo) AddCountry(data model.Country) (lastinserted int64, err error) {
+	timeoutctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	tx, err = repo.dbs.BeginTx(timeoutctx, &sql.TxOptions{Isolation: sql.IsolationLevel(2)})
-	if err != nil {
-		return
-	}
-
-	res, err := tx.ExecContext(timeoutctx, repo.query, data.CountryName, data.Region)
+	res, err := trx.ExecContext(timeoutctx, repo.query, data.CountryName, data.Region)
 	if err != nil {
 		panic(err)
 	}

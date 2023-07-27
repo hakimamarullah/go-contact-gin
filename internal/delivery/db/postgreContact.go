@@ -50,3 +50,21 @@ func (d *PostgreDB) OpenConnection() {
 
 	d.Dbs = db_
 }
+
+func (d *PostgreDB) StartTrx() {
+	trxs, err := mysqldb.Dbs.Begin()
+	if err != nil {
+		return
+	}
+	mysqldb.Trx = trxs
+}
+
+func (d *PostgreDB) DoneTrx(err error) {
+	if err != nil {
+		mysqldb.Trx.Rollback()
+		mysqldb.Trx = &sql.Tx{}
+	} else {
+		mysqldb.Trx.Commit()
+		mysqldb.Trx = &sql.Tx{}
+	}
+}

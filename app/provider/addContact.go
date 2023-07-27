@@ -25,8 +25,9 @@ func NewAddContactHandler() contract.MainHandlerInterface {
 	repoAddress := repo.NewAddresRepo(currentdb)
 	repoPerson := repo.NewAddPersonRepo(currentdb)
 	repoPhone := repo.NewAddPhoneRepo(currentdb)
+	trxRepo := repo.NewTrxRepo(currentdb)
 
-	usecase := usecase.NewAddContactUsecase(repoCountry, repoAddress, repoPerson, repoPhone)
+	usecase := usecase.NewAddContactUsecase(repoCountry, repoAddress, repoPerson, repoPhone, trxRepo)
 
 	return handler.NewAddContactHandler(usecase)
 }

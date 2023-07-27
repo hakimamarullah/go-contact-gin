@@ -21,16 +21,11 @@ func NewAddPersonRepo(db *sql.DB) contract.AddPersonRepoInterface {
 	}
 }
 
-func (repo *AddPersonRepo) AddPerson(data model.Person) (lastinserted int64, tx *sql.Tx, err error) {
-	timeoutctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+func (repo *AddPersonRepo) AddPerson(data model.Person) (lastinserted int64, err error) {
+	timeoutctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	tx, err = repo.dbs.BeginTx(timeoutctx, &sql.TxOptions{Isolation: sql.IsolationLevel(2)})
-	if err != nil {
-		return
-	}
-
-	res, err := tx.ExecContext(timeoutctx, repo.query, data.FirstName, data.LastName, data.Age, data.AddressId)
+	res, err := trx.ExecContext(timeoutctx, repo.query, data.FirstName, data.LastName, data.Age, data.AddressId)
 
 	lastinserted, err = res.LastInsertId()
 

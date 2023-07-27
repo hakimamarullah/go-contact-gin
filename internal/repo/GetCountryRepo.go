@@ -12,7 +12,9 @@ type GetCountryRepo struct {
 }
 
 func NewGetCountryRepo(db *sql.DB) contract.GetCountryRepoInterface {
-	return &GetCountryRepo{}
+	return &GetCountryRepo{
+		dbs: db,
+	}
 }
 
 func (repo *GetCountryRepo) GetAllCountry() (country []model.Country, err error) {
@@ -30,4 +32,14 @@ func (repo *GetCountryRepo) GetAllCountry() (country []model.Country, err error)
 	}
 
 	return
+}
+
+func (repo *AddPhoneRepo) DoneTrx(err error) {
+	if err != nil {
+		trx.Rollback()
+		trx = &sql.Tx{}
+	} else {
+		trx.Commit()
+		trx = &sql.Tx{}
+	}
 }

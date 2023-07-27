@@ -15,6 +15,7 @@ var mysqldb MysqlDB
 
 type MysqlDB struct {
 	Dbs *sql.DB
+	Trx *sql.Tx
 }
 
 func GetMysqlConnection() contract.Dbs {
@@ -51,4 +52,22 @@ func (d *MysqlDB) OpenConnection() {
 	}
 
 	d.Dbs = db_
+}
+
+func (d *MysqlDB) StartTrx() {
+	trxs, err := mysqldb.Dbs.Begin()
+	if err != nil {
+		return
+	}
+	mysqldb.Trx = trxs
+}
+
+func (d *MysqlDB) DoneTrx(err error) {
+	if err != nil {
+		mysqldb.Trx.Rollback()
+		mysqldb.Trx = &sql.Tx{}
+	} else {
+		mysqldb.Trx.Commit()
+		mysqldb.Trx = &sql.Tx{}
+	}
 }
