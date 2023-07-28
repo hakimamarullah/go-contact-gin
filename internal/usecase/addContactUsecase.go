@@ -5,51 +5,51 @@ import (
 	"contact_chiv2/domain/model"
 )
 
-type AddContactUseCase struct {
-	CountryRepo contract.AddCountryRepoInterface
-	AddressRepo contract.AddAddressRepoInterface
-	PersonRepo  contract.AddPersonRepoInterface
-	PhoneRepo   contract.AddPhoneRepoInterface
-	DbTrx       contract.TrxRepoInterface
+type addContactUseCase struct {
+	countryRepo contract.AddCountryRepoInterface
+	addressRepo contract.AddAddressRepoInterface
+	personRepo  contract.AddPersonRepoInterface
+	phoneRepo   contract.AddPhoneRepoInterface
+	dbTrx       contract.TrxRepoInterface
 }
 
 func NewAddContactUsecase(countryrepo contract.AddCountryRepoInterface, addressrepo contract.AddAddressRepoInterface, personrepo contract.AddPersonRepoInterface, phonerepo contract.AddPhoneRepoInterface, transaction contract.TrxRepoInterface) contract.AddContactUsecaseInterface {
-	return &AddContactUseCase{
-		CountryRepo: countryrepo,
-		AddressRepo: addressrepo,
-		PersonRepo:  personrepo,
-		PhoneRepo:   phonerepo,
-		DbTrx:       transaction,
+	return &addContactUseCase{
+		countryRepo: countryrepo,
+		addressRepo: addressrepo,
+		personRepo:  personrepo,
+		phoneRepo:   phonerepo,
+		dbTrx:       transaction,
 	}
 }
 
-func (usecase *AddContactUseCase) AddContact(data model.AddContactRequest) (lastinserted int64, err error) {
-	usecase.DbTrx.StartTrx()
+func (uc *addContactUseCase) AddContact(data model.AddContactRequest) (lastinserted int64, err error) {
+	uc.dbTrx.StartTrx()
 
 	defer func() {
-		usecase.DbTrx.DoneTrx(err)
+		uc.dbTrx.DoneTrx(err)
 	}()
 
 	if err != nil {
 		return
 	}
 
-	lastinserted, err = usecase.CountryRepo.AddCountry(model.NewCountryData(data.CountryName, data.Region))
+	lastinserted, err = uc.countryRepo.AddCountry(model.NewCountryData(data.CountryName, data.Region))
 	if err != nil {
 		return
 	}
 
-	lastinserted, err = usecase.AddressRepo.AddAddress(model.NewAddressData(data.FullAddress, data.DistrictNumber, int(lastinserted)))
+	lastinserted, err = uc.addressRepo.AddAddress(model.NewAddressData(data.FullAddress, data.DistrictNumber, int(lastinserted)))
 	if err != nil {
 		return
 	}
 
-	lastinserted, err = usecase.PersonRepo.AddPerson(model.NewPersonData(data.FirstName, data.LastName, data.Age, int(lastinserted)))
+	lastinserted, err = uc.personRepo.AddPerson(model.NewPersonData(data.FirstName, data.LastName, data.Age, int(lastinserted)))
 	if err != nil {
 		return
 	}
 
-	lastinserted, err = usecase.PhoneRepo.AddPhone(model.NewPhoneData(data.Number, data.IMEI, int(lastinserted)))
+	lastinserted, err = uc.phoneRepo.AddPhone(model.NewPhoneData(data.Number, data.IMEI, int(lastinserted)))
 
 	return
 }

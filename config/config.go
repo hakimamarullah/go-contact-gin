@@ -19,10 +19,10 @@ type configStruct struct {
 	MysqlDB_TimeoutSlow  time.Duration
 }
 
-var appConfig *configStruct
+var appConfig = new(configStruct)
 
 func init() {
-	godotenv.Load("/home/t1ramisu/Project/Bootcamp/batch3/week4/contact_chi/project.env")
+	godotenv.Load("/home/t1ramisu/Project/Bootcamp/batch3/week4/contact_chiv2/project.env")
 	appConfig.MysqlDB_USER = os.Getenv("user")
 	appConfig.MysqlDB_PASS = os.Getenv("password")
 	appConfig.MysqlDB_HOST = os.Getenv("host")

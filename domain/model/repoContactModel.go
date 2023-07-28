@@ -28,6 +28,13 @@ type Phone struct {
 	PersonId int
 }
 
+type Contact struct {
+	Country
+	Address
+	Person
+	Phone
+}
+
 func NewCountryData(countryname string, region string) (country Country) {
 	country.CountryName.Scan(countryname)
 	country.Region.Scan(region)

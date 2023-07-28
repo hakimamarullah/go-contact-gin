@@ -1,6 +1,6 @@
 package model
 
-type AddContactRequest struct {
+type GetContactResponse struct {
 	FirstName      string `json:"first_name,omitempty"`
 	LastName       string `json:"last_name,omitempty"`
 	Age            int    `json:"age,omitempty"`

@@ -18,8 +18,8 @@ type GetAddressRepo struct {
 func NewGetAddressRepo(db *sql.DB) contract.GetAddressRepoInterface {
 	return &GetAddressRepo{
 		dbs:         db,
-		queryGet:    "SELECT CountryName, ProvinceName from Country WHERE Id = ?",
-		queryGetAll: "SELECT CountryName, ProvinceName from Country",
+		queryGet:    "SELECT FullAddress, DistrictNumber FROM Address WHERE Id = ?",
+		queryGetAll: "SELECT FullAddress, DistrictNumber FROM Address",
 	}
 }
 

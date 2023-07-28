@@ -20,7 +20,7 @@ func NewAddContactHandler(usecase contract.AddContactUsecaseInterface) contract.
 }
 
 func (h *AddContactHandler) GetHandler() (method string, path string, handlerfuncs func(w http.ResponseWriter, r *http.Request)) {
-	return http.MethodPost, "/addcontact", h.Handle
+	return http.MethodPost, "/contact", h.Handle
 }
 
 func (h *AddContactHandler) Handle(w http.ResponseWriter, r *http.Request) {

@@ -47,6 +47,10 @@ type AddPhoneRepoInterface interface {
 	AddPhone(data model.Phone) (lastinserted int64, err error)
 }
 
+type GetAllContactRepoInterface interface {
+	GetAllContact() (contacts []model.Contact, err error)
+}
+
 type UpdatePhoneInterface interface{}
 
 type TrxRepoInterface interface {

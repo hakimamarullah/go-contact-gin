@@ -19,8 +19,8 @@ type GetPhoneRepo struct {
 func NewGetPhoneRepo(db *sql.DB) contract.GetPhoneRepoInterface {
 	return &GetPhoneRepo{
 		dbs:         db,
-		queryGet:    "",
-		queryGetAll: "",
+		queryGet:    "SELECT Numbers, IMEI FROM Phone WHERE Id = ?",
+		queryGetAll: "SELECT Numbers, IMEI FROM Phone",
 	}
 }
 

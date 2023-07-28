@@ -11,7 +11,7 @@ func NewServerChi() *chi.Mux {
 	router := chi.NewRouter()
 
 	var server []contract.MainHandlerInterface
-	server = append(server, provider.NewAddContactHandler())
+	server = append(server, provider.NewAddContactHandler(), provider.NewGetAllHandler())
 
 	for _, handler := range server {
 		router.MethodFunc(handler.GetHandler())

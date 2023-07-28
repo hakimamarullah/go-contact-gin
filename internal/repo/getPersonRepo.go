@@ -18,8 +18,8 @@ type GetPersonRepo struct {
 func NewGetPersonRepo(db *sql.DB) contract.GetPersonRepoInterface {
 	return &GetPersonRepo{
 		dbs:         db,
-		queryGet:    "",
-		queryGetAll: "",
+		queryGet:    "SELECT FirstName, LastName, Age FROM Person WHERE Id = ?",
+		queryGetAll: "SELECT FirstName, LastName, Age FROM Person",
 	}
 }
 
@@ -27,7 +27,7 @@ func (repo *GetPersonRepo) GetAllPerson() (person []model.Person, err error) {
 	timeoutctx, cancel := context.WithTimeout(context.Background(), config.AppGetConfig().MysqlDB_TimeoutQuick)
 	defer cancel()
 
-	res, err := repo.dbs.QueryContext(timeoutctx, repo.queryGetAll)
+	res, err := repo.dbs.QueryContext(timeoutctx, repo.queryGet)
 	if err != nil {
 		return
 	}
