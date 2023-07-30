@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"contact_chiv2/config"
-	"contact_chiv2/domain/contract"
+	"contact_ginv1/config"
+	"contact_ginv1/domain/contract"
 
 	_ "github.com/go-sql-driver/mysql"
 )

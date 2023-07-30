@@ -1,8 +1,10 @@
 package contract
 
-import "net/http"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type MainHandlerInterface interface {
-	Handle(w http.ResponseWriter, r *http.Request)
-	GetHandler() (method string, path string, handlerfuncs func(w http.ResponseWriter, r *http.Request))
+	Handle(c *gin.Context)
+	GetHandler() (method string, path string, handlerfuncs func(c *gin.Context))
 }

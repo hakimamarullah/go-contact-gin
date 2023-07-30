@@ -3,11 +3,11 @@ package provider
 import (
 	"database/sql"
 
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/internal/delivery/db"
-	"contact_chiv2/internal/delivery/handler"
-	"contact_chiv2/internal/repo"
-	"contact_chiv2/internal/usecase"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/internal/delivery/db"
+	"contact_ginv1/internal/delivery/handler"
+	"contact_ginv1/internal/repo"
+	"contact_ginv1/internal/usecase"
 )
 
 func NewAddContactHandler() contract.MainHandlerInterface {

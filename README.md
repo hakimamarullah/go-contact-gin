@@ -1,1 +1,1 @@
-# GO-Contact-Chi
+# GO-Contact-Gin

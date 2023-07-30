@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"contact_chiv2/config"
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/config"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type GetAddressRepo struct {
@@ -18,7 +18,7 @@ type GetAddressRepo struct {
 func NewGetAddressRepo(db *sql.DB) contract.GetAddressRepoInterface {
 	return &GetAddressRepo{
 		dbs:         db,
-		queryGet:    "SELECT FullAddress, DistrictNumber FROM Address WHERE Id = ?",
+		queryGet:    "SELECT FullAddress, DistrictNumber, CountryId FROM Address WHERE Id = ?",
 		queryGetAll: "SELECT FullAddress, DistrictNumber FROM Address",
 	}
 }
@@ -49,7 +49,7 @@ func (repo *GetAddressRepo) GetAddressById(id int) (address model.Address, err e
 	defer cancel()
 
 	res := repo.dbs.QueryRowContext(timeoutctx, repo.queryGet, id)
-	err = res.Scan(&address.FullAddress, &address.DistrictNumber)
+	err = res.Scan(&address.FullAddress, &address.DistrictNumber, &address.CountryId)
 
 	return
 }

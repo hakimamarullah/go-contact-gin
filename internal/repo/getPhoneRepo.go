@@ -5,22 +5,26 @@ import (
 	"database/sql"
 	"time"
 
-	"contact_chiv2/config"
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/config"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type GetPhoneRepo struct {
-	queryGet    string
-	queryGetAll string
-	dbs         *sql.DB
+	queryGet          string
+	queryGetAll       string
+	queryGetByNumbers string
+	queryGetByIMEI    string
+	dbs               *sql.DB
 }
 
 func NewGetPhoneRepo(db *sql.DB) contract.GetPhoneRepoInterface {
 	return &GetPhoneRepo{
-		dbs:         db,
-		queryGet:    "SELECT Numbers, IMEI FROM Phone WHERE Id = ?",
-		queryGetAll: "SELECT Numbers, IMEI FROM Phone",
+		dbs:               db,
+		queryGet:          "SELECT Numbers, IMEI FROM Phone WHERE Id = ?",
+		queryGetAll:       "SELECT Numbers, IMEI FROM Phone",
+		queryGetByNumbers: "SELECT Numbers, IMEI, PersonId FROM Phone WHERE UPPER(Numbers) = upper(?)",
+		queryGetByIMEI:    "SELECT Numbers, IMEI, PersonId FROM Phone WHERE UPPER(IMEI) = upper(?)",
 	}
 }
 
@@ -51,6 +55,26 @@ func (repo *GetPhoneRepo) GetPhoneById(id int) (phone model.Phone, err error) {
 
 	res := repo.dbs.QueryRowContext(timeoutctx, repo.queryGet, id)
 	err = res.Scan(&phone.Numbers, &phone.IMEI)
+
+	return
+}
+
+func (repo *GetPhoneRepo) GetPhoneByNumber(number string) (phone model.Phone, err error) {
+	timeoutctx, cancel := context.WithTimeout(context.Background(), config.AppGetConfig().MysqlDB_TimeoutQuick)
+	defer cancel()
+
+	res := repo.dbs.QueryRowContext(timeoutctx, repo.queryGetByNumbers, number)
+	err = res.Scan(&phone.Numbers, &phone.IMEI, &phone.PersonId)
+
+	return
+}
+
+func (repo *GetPhoneRepo) GetPhoneByIMEI(imei string) (phone model.Phone, err error) {
+	timeoutctx, cancel := context.WithTimeout(context.Background(), config.AppGetConfig().MysqlDB_TimeoutQuick)
+	defer cancel()
+
+	res := repo.dbs.QueryRowContext(timeoutctx, repo.queryGetByIMEI, imei)
+	err = res.Scan(&phone.Numbers, &phone.IMEI, &phone.PersonId)
 
 	return
 }

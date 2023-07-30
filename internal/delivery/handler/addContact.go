@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type AddContactHandler struct {
@@ -19,21 +19,21 @@ func NewAddContactHandler(usecase contract.AddContactUsecaseInterface) contract.
 	}
 }
 
-func (h *AddContactHandler) GetHandler() (method string, path string, handlerfuncs func(w http.ResponseWriter, r *http.Request)) {
+func (h *AddContactHandler) GetHandler() (method string, path string, handlerfuncs func(c *gin.Context)) {
 	return http.MethodPost, "/contact", h.Handle
 }
 
-func (h *AddContactHandler) Handle(w http.ResponseWriter, r *http.Request) {
+func (h *AddContactHandler) Handle(c *gin.Context) {
 	var requestBody model.AddContactRequest
 
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&requestBody)
+	err := c.ShouldBindJSON(&requestBody)
 	if err != nil {
 		panic(err)
 	}
 
 	lastinserted, err := h.uc.AddContact(requestBody)
 
+	w := c.Writer
 	w.Write([]byte(fmt.Sprintln("Error :", err)))
 	w.Write([]byte(fmt.Sprintln("LastInserted :", lastinserted)))
 }

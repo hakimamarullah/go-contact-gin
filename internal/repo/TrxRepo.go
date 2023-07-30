@@ -3,8 +3,8 @@ package repo
 import (
 	"database/sql"
 
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/internal/delivery/db"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/internal/delivery/db"
 )
 
 var trx *sql.Tx

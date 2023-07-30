@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type addContactUseCase struct {

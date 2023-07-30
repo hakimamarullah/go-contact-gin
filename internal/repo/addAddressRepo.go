@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"contact_chiv2/config"
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/config"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type AddAddressRepo struct {

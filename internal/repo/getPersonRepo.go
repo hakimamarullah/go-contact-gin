@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"contact_chiv2/config"
-	"contact_chiv2/domain/contract"
-	"contact_chiv2/domain/model"
+	"contact_ginv1/config"
+	"contact_ginv1/domain/contract"
+	"contact_ginv1/domain/model"
 )
 
 type GetPersonRepo struct {
@@ -18,7 +18,7 @@ type GetPersonRepo struct {
 func NewGetPersonRepo(db *sql.DB) contract.GetPersonRepoInterface {
 	return &GetPersonRepo{
 		dbs:         db,
-		queryGet:    "SELECT FirstName, LastName, Age FROM Person WHERE Id = ?",
+		queryGet:    "SELECT FirstName, LastName, Age, AddressId FROM Person WHERE Id = ?",
 		queryGetAll: "SELECT FirstName, LastName, Age FROM Person",
 	}
 }
@@ -49,7 +49,7 @@ func (repo *GetPersonRepo) GetPersonById(id int) (person model.Person, err error
 	defer cancel()
 
 	res := repo.dbs.QueryRowContext(timeoutctx, repo.queryGet, id)
-	err = res.Scan(&person.FirstName, &person.LastName, &person.Age)
+	err = res.Scan(&person.FirstName, &person.LastName, &person.Age, &person.AddressId)
 
 	return
 }
